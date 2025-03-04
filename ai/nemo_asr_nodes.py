@@ -1,7 +1,6 @@
 # ReazonSpeech nemo-asr
 # https://github.com/reazon-research/ReazonSpeech/tree/master/pkg/nemo-asr
 import torch
-from reazonspeech.nemo.asr import audio_from_tensor, load_model, transcribe
 
 from ..node_def import BASE_NODE_CATEGORY, AudioData
 
@@ -22,6 +21,7 @@ class NemoAsrLoader:
     FUNCTION = "load"
 
     def load(self, device):
+        from reazonspeech.nemo.asr import load_model
         if device == "auto":
             device = "cuda" if torch.cuda.is_available() else "cpu"
         model = load_model(device)
@@ -62,6 +62,7 @@ class NemoAsrTranscribe:
         batch_text = []
         batch_subwords = []
         batch_segments = []
+        from reazonspeech.nemo.asr import audio_from_tensor, transcribe
 
         for b in range(audio["waveform"].shape[0]):
             model_input_audio = audio_from_tensor(audio["waveform"][b], audio["sample_rate"])
